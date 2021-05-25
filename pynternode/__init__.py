@@ -112,10 +112,17 @@ class NodeJSRepl:
         if out == b'Thrown:\r\n':
             # all_ret = self._wait_finish()
             all_ret = out
-            print(out)
-            while out:
-                out = self.nodejs.readline()
-                print(out)
+            #print(out)
+            old_timeout = self.nodejs.timeout
+            self.nodejs.timeout = 1
+            try:
+                while out:
+                    out = self.nodejs.readline()
+                    print(out)
+                    all_ret += out
+            except:
+                pass
+            self.nodejs.timeout = old_timeout
             raise RuntimeError(f"JS Exception: Thrown:\n{all_ret}")
         out_fix = ansi_escape_8bit.sub(b'', out).strip()
         print("Final return(next is wait finish)>>>", out_fix)
