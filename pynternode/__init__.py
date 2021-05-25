@@ -84,6 +84,7 @@ class NodeJSRepl:
         self.nodejs.sendline("")
         time.sleep(0.005)
         self._wait_finish()
+        self._wait_finish()
         #print("END Running no result")
     
     def ret_raw(self, cmdline):
