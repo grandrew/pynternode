@@ -30,7 +30,7 @@ class NodeJSRepl:
                 break 
 
     def _wait_finish(self):
-        print("WAIT FINISH")
+        #print("WAIT FINISH")
         out = b""
         ts = time.time()
         while True:
@@ -41,18 +41,18 @@ class NodeJSRepl:
             except:
                 time.sleep(0.2) 
                 if time.time() - ts > 0.5:
-                    print("WAIT IFNISH TIMEIOUYT")
+                    #print("WAIT IFNISH TIMEIOUYT")
                     break
         out = ansi_escape_8bit.sub(b'', out).strip().decode("utf-8")
         if "Thrown:" in out:
             raise RuntimeError(f"Exception in JS: {out}")
-        print("WAIT FINISH OUT IS:\n", out)
+        #print("WAIT FINISH OUT IS:\n", out)
         time.sleep(0.05)
         return out
     
     def exec_logall(self, cmdline):
-        print("=====================")
-        print("EXEC_LOGALL Sending line to nodejs:", cmdline)
+        #print("=====================")
+        #print("EXEC_LOGALL Sending line to nodejs:", cmdline)
         self.nodejs.sendline("")
         time.sleep(0.05)
         self._wait_finish()
@@ -65,11 +65,11 @@ class NodeJSRepl:
             except:
                 break
         out = ansi_escape_8bit.sub(b'', out).strip()
-        print(out.decode("utf-8"))
+        #print(out.decode("utf-8"))
     
     def execl(self, cmdline):
-        print("=====================")
-        print("Sending line to nodejs:", cmdline)
+        #print("=====================")
+        #print("Sending line to nodejs:", cmdline)
         self.nodejs.sendline("")
         time.sleep(0.01)
         self._wait_finish()
@@ -82,12 +82,9 @@ class NodeJSRepl:
         time.sleep(0.01)
         self.nodejs.sendline(cmdline.encode("utf-8"))
         time.sleep(0.05)
-        # out = self.nodejs.readline()
-        # out = ansi_escape_8bit.sub(b'', out).strip()
-        # print(out)
     
     def run(self, cmdline):
-        print("Running no result")
+        #print("Running no result")
         self.execl(cmdline)
         self._wait_finish()
         self.nodejs.sendline("")
@@ -99,13 +96,13 @@ class NodeJSRepl:
         self.nodejs.sendline("")
         time.sleep(0.01)
         self._wait_finish()
-        print("END Running no result")
+        #print("END Running no result")
     
     def ret_raw(self, cmdline):
         self.execl(cmdline)
         out = self.nodejs.readline()
         while out.startswith(b" ") or out.startswith(b'(node:') or b"async>" in out:
-            print("Raw ret (wait for more)", out)
+            #print("Raw ret (wait for more)", out)
             out = self.nodejs.readline()
         if cmdline in out.decode("utf-8"):
             out = self.nodejs.readline()
@@ -125,9 +122,9 @@ class NodeJSRepl:
             self.nodejs.timeout = old_timeout
             raise RuntimeError(f"JS Exception: Thrown:\n{all_ret}")
         out_fix = ansi_escape_8bit.sub(b'', out).strip()
-        print("Final return(next is wait finish)>>>", out_fix)
+        #print("Final return(next is wait finish)>>>", out_fix)
         self._wait_finish()
-        print("Final return>>>", out)
+        #print("Final return>>>", out)
         return out_fix
 
     def ret_int(self, cmdline):
