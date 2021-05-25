@@ -35,28 +35,28 @@ class NodeJSRepl:
         ts = time.time()
         while True:
             try:
-                out += self.nodejs.read_nonblocking(timeout=0.2)
+                out += self.nodejs.read_nonblocking(timeout=0.05)
                 if b"async>" in out:
                     break
             except:
-                time.sleep(0.2) 
-                if time.time() - ts > 0.5:
+                time.sleep(0.01) 
+                if time.time() - ts > 0.1:
                     #print("WAIT IFNISH TIMEIOUYT")
                     break
         out = ansi_escape_8bit.sub(b'', out).strip().decode("utf-8")
         if "Thrown:" in out:
             raise RuntimeError(f"Exception in JS: {out}")
         #print("WAIT FINISH OUT IS:\n", out)
-        time.sleep(0.05)
+        time.sleep(0.01)
         return out
     
     def exec_logall(self, cmdline):
         #print("=====================")
         #print("EXEC_LOGALL Sending line to nodejs:", cmdline)
         self.nodejs.sendline("")
-        time.sleep(0.05)
+        time.sleep(0.01)
         self._wait_finish()
-        time.sleep(0.05)
+        time.sleep(0.01)
         self.nodejs.sendline(cmdline)
         out = b""
         while True:
@@ -71,30 +71,18 @@ class NodeJSRepl:
         #print("=====================")
         #print("Sending line to nodejs:", cmdline)
         self.nodejs.sendline("")
-        time.sleep(0.01)
+        time.sleep(0.005)
         self._wait_finish()
-        self.nodejs.sendline("")
-        time.sleep(0.01)
-        self._wait_finish()
-        self.nodejs.sendline("")
-        time.sleep(0.01)
-        self._wait_finish()
-        time.sleep(0.01)
+        time.sleep(0.005)
         self.nodejs.sendline(cmdline.encode("utf-8"))
-        time.sleep(0.05)
+        time.sleep(0.005)
     
     def run(self, cmdline):
         #print("Running no result")
         self.execl(cmdline)
         self._wait_finish()
         self.nodejs.sendline("")
-        time.sleep(0.01)
-        self._wait_finish()
-        self.nodejs.sendline("")
-        time.sleep(0.01)
-        self._wait_finish()
-        self.nodejs.sendline("")
-        time.sleep(0.01)
+        time.sleep(0.005)
         self._wait_finish()
         #print("END Running no result")
     
